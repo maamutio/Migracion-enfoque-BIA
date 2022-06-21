@@ -1,0 +1,408 @@
+var targetSheet1 = SpreadsheetApp.openById("1UKjWNq0fsSW90VDSd1bWWDCirnTUzNJjz5eVVPseFGk") //Herramienta
+
+var cuestionariosBIA = SpreadsheetApp.openById('1ZcMVbTr-FSU5Pb9gaqya6mCvQ-E2WOtz51OLgJ4W4I8').getSheetByName('Sheet2')
+var idsCuestionarios = cuestionariosBIA.getRange('B2:B38').getValues()
+
+var origen1 = SpreadsheetApp.openById('1YvDTAFknfyNJbEh2SePuQP7ov-2OSKumXrErMCz0xi8'/*idsCuestionarios[4]*/)  // (Siguiente iteración !!34!!) Cuestionario --> posteriormente será una carpeta
+
+//Funciona bien
+function Proceso() {
+  var source = origen1.getSheetByName("ApoyoDatos");
+  var target = targetSheet1.getSheetByName("Procesos");
+  var sourceRange = source.getRange("A3:I3");
+  var sourceData = sourceRange.getValues();
+
+  var targetRangeTop = target.getLastRow();
+  Logger.log(targetRangeTop)
+
+  target.getRange(2, 1, 1, sourceRange.getNumColumns()).setValues(sourceData);
+
+  sourceData = source.getRange('J3').getValue();
+  target.getRange(2, 10, 1, 1).setValue(sourceData)
+  sourceData = source.getRange('K3').getValue();
+  target.getRange(2, 12, 1, 1).setValue(sourceData)
+}
+
+//Funciona bien
+function ProcesoProveedor() {
+  var source = origen1.getSheetByName("ApoyoDatos");
+  var target = targetSheet1.getSheetByName("procesoProveedor");
+  var sourceRange = source.getRange('O3:U18');
+  var sourceData = sourceRange.getValues();
+  var sourceProce = source.getRange('M3:M18').getValues();
+  target.getRange(2, 1, sourceProce.length, sourceProce[0].length).setValues(sourceProce)
+  target.getRange(2, 3, source.getRange('N3:N18').getNumRows(), 1).setValues(source.getRange('N3:N18').getValues());
+  target.getRange(2, 4, sourceRange.getNumRows(), sourceRange.getNumColumns()).setValues(sourceData)
+}
+
+//Funciona bien
+function ProcesoPersona() {
+  var source = origen1.getSheetByName("ApoyoDatos");
+  var target = targetSheet1.getSheetByName("procesoPersona");
+
+  var sourceRange = source.getRange('Z3:Z96');
+  var sourceData = sourceRange.getValues()
+
+  target.getRange(2, 1, sourceRange.getNumRows()).setValues(sourceData)
+
+  sourceRange = source.getRange('AA3:AC96');
+  sourceData = sourceRange.getValues();
+
+  target.getRange(2, 3, sourceRange.getNumRows(), sourceRange.getNumColumns()).setValues(sourceData)
+
+  /*
+  target.getRange(2, 1, sourceRange.getNumRows()).setValues(sourceData)
+
+  sourceRange = source.getRange('AC3:AC44');
+  sourceData = sourceRange.getValues();
+  target.getRange(2, 3, sourceRange.getNumRows()).setValues(sourceData);
+
+  sourceRange = source.getRange('AB3:AB44')
+  sourceData = sourceRange.getValues()
+  target.getRange(2, 4, sourceRange.getNumRows()).setValues(sourceData);
+
+  sourceRange = source.getRange('AD3:AD44')
+  sourceData = sourceRange.getValues()
+  target.getRange(2, 5, sourceRange.getNumRows()).setValues(sourceData);
+  */
+}
+
+//Funciona bien
+function ProcesoAplicacion() {
+  var source = origen1.getSheetByName("ApoyoDatos");
+  var target = targetSheet1.getSheetByName("procesoAplicacion");
+  var sourceRange = source.getRange('AE3:AE19');
+  var sourceData = sourceRange.getValues();
+  target.getRange(2, 1, sourceRange.getNumRows()).setValues(sourceData)
+
+  sourceRange = source.getRange('AF3:AJ19');
+  sourceData = sourceRange.getValues();
+  target.getRange(2, 3, sourceRange.getNumRows(), sourceRange.getNumColumns()).setValues(sourceData);
+
+  /*
+  sourceRange = source.getRange('AH3:AK19');
+  sourceData = sourceRange.getValues();
+  target.getRange(2, 4, sourceRange.getNumRows(), sourceRange.getNumColumns()).setValues(sourceData);
+  */
+}
+
+//Funciona bien
+function ProcesoSoporte() {
+  var source = origen1.getSheetByName("ApoyoDatos");
+  var target = targetSheet1.getSheetByName("procesoSoporte");
+  var sourceRange = source.getRange('AL3:AL10');
+  var sourceData = sourceRange.getValues();
+  target.getRange(2, 1, sourceRange.getNumRows()).setValues(sourceData)
+
+  var datosApoyo = source.getRange('AO3:AO10').getValues();
+  sourceRange = source.getRange('AM3:AO10');
+
+  sourceData = sourceRange.getValues();
+  target.getRange(2, 3, sourceRange.getNumRows(), sourceRange.getNumColumns()).setValues(sourceData);
+
+
+}
+
+//Funciona bien
+function ProcesoCanal() {
+  var source = origen1.getSheetByName("ApoyoDatos");
+  var target = targetSheet1.getSheetByName("procesoCanal");
+  var sourceRange = source.getRange('AQ3:AQ14');
+  var sourceData = sourceRange.getValues();
+  //target.getRange(2, 1, sourceRange.getNumRows()).setValues(sourceData)
+
+  var datosApoyo = source.getRange('AT3:AT14').getValues();
+  sourceRange = source.getRange('AR3:AT14');
+  sourceData = sourceRange.getValues()
+
+  target.getRange(2, 3, sourceRange.getNumRows(), sourceRange.getNumColumns()).setValues(sourceData)
+  /*
+  var row = 2;
+  for (i = 0; i < sourceRange.getNumRows() - 1; i++) {
+    if (datosApoyo[i] == "Sí") {
+      var dato = sourceRange.getValues()[i];
+      target.getRange(row, 3, 1, 1).setValue(dato);
+      row++;
+    }
+  }
+  if (source.getRange('AT14').getValue() != "") {
+    target.getRange(row, 3, 1, 1).setValue(source.getRange('AS14').getValue());
+    target.getRange(row, 4, 1, 1).setValue(source.getRange('AT14').getValue());
+  }
+  */
+}
+
+function ProcesoELM() {
+  var source = origen1.getSheetByName("ApoyoDatos");
+  var target = targetSheet1.getSheetByName("procesoELM");
+  var sourceRange = source.getRange('AV3:AV6');
+  var sourceData = sourceRange.getValues();
+  target.getRange(2, 1, sourceRange.getNumRows()).setValues(sourceData)
+
+  sourceRange = source.getRange('AW3:AW6');
+  sourceData = sourceRange.getValues();
+  target.getRange(2, 3, sourceRange.getNumRows()).setValues(sourceData)
+
+
+  /*
+  var row = 2;
+  for (i = 0; i < sourceRange.getNumRows(); i++) {
+    if (datosApoyo[i] != "") {
+      var dato = sourceRange.getValues()[i];
+      target.getRange(row, 3, 1, 1).setValue(dato);
+      row++;
+    }
+  }
+*/
+  //sourceRange = source.getRange('AX3:AX6');
+  //sourceData=sourceRange.getValues();
+  //target.getRange(2,3,sourceRange.getNumRows()).setValues(sourceData); 
+}
+
+function ApoyoImpacto() {
+  var idRange = origen1.getSheetByName("Cuestionario")
+  var id = idRange.getRange('AJ5').getValue();
+  var source = origen1.getSheetByName("Apoyo impacto");
+  var target = targetSheet1.getSheetByName("ApoyoImpacto");
+
+  var sourceRanges = source.getRangeList(["B3:L10", "B14:L30", "B34:L49", "B53:L56", "B60:L63"]).getRanges();
+  var length = sourceRanges.length - 1;
+  for (let i = 0; i <= length; i++) {
+    var sourceData = sourceRanges[i].getValues();
+    var targetRangeTop = target.getLastRow();
+    target.getRange(targetRangeTop + 1, 2, sourceData.length, sourceData[0].length).setValues(sourceData);
+    target.getRange(targetRangeTop + 1, 1, sourceData.length, 1).setValue(id);
+  }
+}
+
+function ApoyoImpactoRE() {
+  Logger.log(origen1.getName())
+  var source = origen1.getSheetByName("Apoyo impacto");
+  var target = targetSheet1.getSheetByName("ApoyoImpactoRE");
+  var sourceRanges = source.getRangeList(["C78:E83", "C85:E88", "C90:E93", "C95:E105"]).getRanges();
+  var length = sourceRanges.length - 1;
+  for (let i = 0; i <= length; i++) {
+    var sourceData = sourceRanges[i].getValues();
+    var targetRangeTop = target.getLastRow();
+    target.getRange(targetRangeTop + 1, 1, sourceData.length, sourceData[0].length).setValues(sourceData);
+  }
+}
+
+function Flujo() {
+  var source = origen1.getSheetByName("ApoyoDatos");
+  var target = targetSheet1.getSheetByName("Flujo");
+
+  var sourceData = source.getRange('AZ3:BI9').getValues();
+  var id = origen1.getSheetByName("Cuestionario").getRange('AJ5').getValue();
+
+  for (i = 0; i < sourceData.length; i++) {
+    target.getRange(2, 1, sourceData.length, 1).setValue(id)
+  }
+  target.getRange(2, 2, sourceData.length, sourceData[0].length).setValues(sourceData)
+}
+
+function Dependencia() {
+  var source1 = origen1.getSheetByName("ApoyoDatos");
+  var target1 = targetSheet1.getSheetByName("Dependencias");
+
+  var sourceData1 = source1.getRange('W3:X7').getValues()
+  Logger.log(sourceData1)
+  var id = source1.getRange('V3:V7').getValues()
+  Logger.log(id)
+  target1.getRange(2, 2, sourceData1.length, sourceData1[0].length).setValues(sourceData1)
+  target1.getRange(2, 1, id.length, id[0].length).setValues(id)
+
+  /*
+    for (i = 0; i < sourceData.length; i++) {
+      target.getRange(2, 1, sourceData.length, 1).setValue(id)
+    }
+    target.getRange(2, 2, sourceData.length, sourceData[0].length).setValues(sourceData)
+    */
+}
+
+function CargaBIA() {
+  Proceso();
+  ProcesoProveedor();
+  ProcesoPersona();
+  ProcesoSoporte();
+  ProcesoELM();
+  ProcesoCanal();
+  ProcesoAplicacion();
+  ApoyoImpacto();
+  ApoyoImpactoRE();
+  Dependencia();
+  Flujo();
+  Calendario();
+  OrdenImpacto();
+  OrdenImpactoRE()
+  procesoMomentoCritico();
+}
+
+var herramientaVF = SpreadsheetApp.openById("1UKjWNq0fsSW90VDSd1bWWDCirnTUzNJjz5eVVPseFGk")
+
+function OrdenImpacto() {
+  var source1 = herramientaVF.getSheetByName("ApoyoImpacto");
+  var target1 = herramientaVF.getSheetByName("procesoImpacto");
+
+  var datosApoyo = source1.getRange('B2:B50').getValues();
+  var ranges = source1.getRange('B2:B50')
+  Logger.log(datosApoyo)
+  var rowPaste = 2;
+  var rowSource1 = 2;
+  //Codigo muy sucio, poco optimizado
+  for (i = 0; i < datosApoyo.length; i++) {
+    if (datosApoyo[i] == 1) {
+      target1.getRange(rowPaste, 3).setValue(source1.getRange(rowSource1 + i, 12).getValue());
+      target1.getRange(rowPaste, 4).setValue(source1.getRange(rowSource1 + i, 3).getValue());
+      target1.getRange(rowPaste, 5).setValue(source1.getRange(rowSource1 + i, 4).getValue())
+      rowPaste++;
+    }
+  }
+}
+
+function OrdenImpactoRE() {
+  var source1 = herramientaVF.getSheetByName("ApoyoImpactoRE");
+  var target1 = herramientaVF.getSheetByName("procesoImpacto");
+
+  var source1Range = source1.getRange('C2:C26');
+  //var source1Data = source1Range.getValues();
+
+  var datosApoyo = source1.getRange('A2:A26').getValues();
+  Logger.log(datosApoyo)
+
+  var row = 2;
+  for (i = 0; i < source1Range.getNumRows(); i++) {
+    if (datosApoyo[i] == 1) {
+      var dato = source1Range.getValues()[i];
+      target1.getRange(row, 8, 1, 1).setValue(dato);
+      row++;
+    }
+  }
+}
+
+var herramientaVF = SpreadsheetApp.openById("1UKjWNq0fsSW90VDSd1bWWDCirnTUzNJjz5eVVPseFGk")
+//var origen1 = SpreadsheetApp.openById("11OK9RGn59Ha14KosK6Ygz88-Lwj4MiTzr8s0TTbVhr8")
+
+var meses = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
+
+function Calendario() {
+  var source = origen1.getSheetByName("ApoyoDatos");
+  var target = herramientaVF.getSheetByName("Calendario");
+  var proc = herramientaVF.getSheetByName("procesoMomentoCritico");
+  var target2 = herramientaVF.getSheetByName("Calendario2");
+
+
+  var indice = 9;
+
+  //Identificar momento
+  var tipos = source.getRange('BM3:BM8').getValues();
+  Logger.log(tipos)
+
+  for (var i = 0; i < tipos.length; i++) {
+
+    if (tipos[i] != "" && tipos[i] != "Seleccionar momento crítico") {
+
+      var d1 = source.getRange('BN' + (i + 3)).getValue();
+
+      var m1 = source.getRange('BO' + (i + 3)).getValue();
+
+      var d2 = source.getRange('BP' + (i + 3)).getValue();
+
+      var m2 = source.getRange('BQ' + (i + 3)).getValue();
+
+      /*
+      //Esto solo para todos los días, así no está bien
+      if (m1 == "Todos") {
+
+        target.getRange(indice, 3, 1, 366).setValue(1);
+        var data12 = target2.getRange('E3:E368').getValues()
+        Logger.log(data12)
+        proc.getRange(2, 2, data12.length).setValues(data12)
+      }
+      */
+
+      if (tipos[i] == "Día Específico") {
+        if (m1 = 'Todos') {
+          for (j = 0; j < meses.length; j++) {
+            target.getRange(indice, (2 + meses[j] + d1)).setValue(1) //i=índice
+          }
+
+        }
+        else {
+          target.getRange(indice, (2 + meses[m1 - 1] + d1)).setValue(1) //i=índice
+        }
+        //target.getRange(indice, (2 + meses[m1 - 1] + d1)).setValue(1) //i=índice
+
+      }
+
+      else if (tipos[i] == "Día Hábil") {
+        if (m1 = 'Todos') {
+          for (j = 0; j < meses.length; j++) {
+            target.getRange(indice, (2 + meses[j] + d1)).setValue(1) //i=índice
+          }
+
+        }
+        else {
+          target.getRange(indice, (2 + meses[m1 - 1] + d1)).setValue(1) //i=índice}
+        }
+      }
+
+      else if (tipos[i] == "Semana Siguiente") {
+        if (m1 = "Todos") {
+          for (j = 0; j < meses.length; j++) {
+            var inicio = 2 + meses[j] + d1;
+            target.getRange(indice, inicio + 1, 1, 7).setValue(1);
+          }
+        }
+        else {
+          var inicio = 2 + meses[m1 - 1] + d1;
+          target.getRange(indice, inicio + 1, 1, 7).setValue(1);
+        }
+      }
+
+      else if (tipos[i] == "Semana Anterior") {
+        Logger.log("hola")
+        //var lastRow = proc.getLastRow() + 1
+        if (m1 = "Todos") {
+          for (j = 0; j < meses.length; j++) {
+            var inicio = 2 + meses[j] + d1;
+            target.getRange(indice, inicio - 7, 1, 7).setValue(1);
+          }
+
+        }
+        else {
+          var inicio = 2 + meses[m1 - 1] + d1;
+          target.getRange(indice, inicio - 7, 1, 7).setValue(1);
+          //var data = target2.getRange(inicio - 7, 5, 7, 1).getValues()
+          //proc.getRange(lastRow, 2, data.length).setValues(data)
+        }
+      }
+
+      else if (tipos[i] == "Rango de tiempo") {
+        var inicio = 2 + meses[m1 - 1] + d1;
+        var diff = (2 + meses[m2 - 1] + d2) - inicio + 1;
+        target.getRange(indice, inicio, 1, diff).setValue(1);
+
+      }
+    }
+  }
+}
+
+function procesoMomentoCritico() {
+  var posiciones = 6;
+  var targetCal = herramientaVF.getSheetByName("Calendario");
+  var targetMomento = herramientaVF.getSheetByName("procesoMomentoCritico");
+
+  var cuenta = 0;
+
+  var indMomento = 2//targetMomento.getLastRow() + 1;
+  for (var j = 3; j < 368; j++) {
+    if (targetCal.getRange(9, j).getValue() == 1) {
+      cuenta++;
+      targetMomento.getRange(indMomento, 2, 1, 1).setValue(targetCal.getRange(5, j, 1, 1).getValue())
+      Logger.log(targetCal.getRange(5, j, 1, 1).getValue())
+      indMomento++;
+    }
+  }
+  Logger.log(cuenta)
+}
