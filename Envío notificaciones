@@ -1,0 +1,58 @@
+var hojaCorreos = SpreadsheetApp.openById('1lmC6bj8qUNiNCH9NqKp7NRdwUNy6mQR0U2TcUUCM-6k').getSheetByName('PRUEBA')
+var sheetCuerpo = SpreadsheetApp.openById('1lmC6bj8qUNiNCH9NqKp7NRdwUNy6mQR0U2TcUUCM-6k').getSheetByName('PANEL DE CONTROL')
+
+var arrayProcesos = hojaCorreos.getRange('C9:C40').getValues()
+var arrayNombresCortos = hojaCorreos.getRange('F9:F40').getValues()
+var arrayCorreos = hojaCorreos.getRange('G9:G40').getValues()
+
+var introduccion = sheetCuerpo.getRange('L14').getValue()
+var cuerpo1 = sheetCuerpo.getRange('L16').getValue()
+var cuerpo2 = sheetCuerpo.getRange('L22').getValue()
+var asunto = 'Actualización de BIAs: '
+
+var oldFolder = DriveApp.getFolderById('1BmjLogc3QySC3xo_Nj0KixghAulamv4J')
+var oldBIAs = oldFolder.getFiles()
+var newFolder = DriveApp.getFolderById('1Z4KDIIA3JJ6EdC4kzmH1upYVGLARIWOB')
+
+function copiaBIAs() {
+  var procesos =[]
+  while (oldBIAs.hasNext()){
+    var n = oldBIAs.next()
+    var x = n.getName()
+    var y = n.getId()
+    DriveApp.getFileById(y).makeCopy(x, newFolder)
+  }
+}
+
+function automatCorreo(){
+  var newBIAs = newFolder.getFiles()
+  var procesos = []
+  while(newBIAs.hasNext()){
+    var n = newBIAs.next()
+    var x = n.getName()
+    procesos.push(x)
+  }
+
+  for (i =0; i<arrayProcesos.length;i++){
+    for(j=0; j<procesos.length;j++){
+      if(procesos[j]==arrayProcesos[i]){
+        var file = newFolder.getFilesByName(arrayProcesos[i]).next().getUrl()
+        Logger.log(arrayCorreos[i])
+        newFolder.getFilesByName(arrayProcesos[i]).next().addEditor(arrayCorreos[i].toString())
+        newFolder.getFilesByName(arrayProcesos[i]).next().setShareableByEditors(true)
+
+        GmailApp.sendEmail(arrayCorreos[i],(asunto + arrayProcesos[i] ),(introduccion + arrayNombresCortos[i] + cuerpo1 + arrayProcesos[i] + cuerpo2  + file),)
+      }
+    }
+    if(arrayProcesos[i]=='') break
+  }
+
+  Logger.log(arrayProcesos)
+  Logger.log(procesos)
+
+}
+
+function main (){
+  copiaBIAs()
+  automatCorreo()
+}
