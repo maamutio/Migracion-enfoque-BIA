@@ -1,0 +1,128 @@
+function migrateMove() {
+  var fila = 19;
+  for (j = 0; j < ids.length; j++) {
+    var cuestBIA
+    var actividadID
+    var codDep
+    var funcionCrit
+    Logger.log(ids.length)
+    Logger.log(ids[3])
+    namePro(ids[j], cuestBIA, actividadID,codDep,funcionCrit)
+    //funcionCritica(cuestBIA, actividadID,codDep,funcionCrit)
+  }
+
+}
+
+function namePro(id, cuestBIA, actividadID) {
+  var procFun = depBIA.getSheetByName('2A.ACTIVIDADES & PROC-FUN')
+  var datos = procFun.getRange('F19:F55').getValues()
+  for (i = 0; i < datos.length; i++) {
+
+    if (datos[i] == id && procFun.getRange('N' + (19 + i)).getValue() == "Con Impacto") {
+      Logger.log(procFun.getRange('G' + (19 + i)).getValue())
+      var name = procFun.getRange('G' + (19 + i)).getValue()
+      procesoBIA.makeCopy(procFun.getRange('G' + (19 + i)).getValue())
+
+      var fileId = DriveApp.getFolderById('1wGHGqpwwT5pzO5TEKpSLwtc_oafi3m58').getFilesByName(procFun.getRange('G' + (19 + i)).getValue()).next().getId()
+      DriveApp.getFileById(fileId).moveTo(DriveApp.getFolderById('1KJ0Tf_qqc5ZLgO4lc6QMJc1Ot9jNQKMO'))
+      cuestBIA = SpreadsheetApp.openById(fileId)
+      //HAY QUE CAMBIAR LA METODOLOGÍA, AHORA OBJETIVO TIENE QUE SER EL NUEVO BIA POR PROCESO CREADO
+
+      cuestBIA.getSheetByName('Cuestionario').getRange('H5').setValue(procFun.getRange('G' + (19 + i)).getValue())
+      cuestBIA.getSheetByName('Cuestionario').getRange('AJ5').setValue(id)
+      actividadID = procFun.getRange('D' + (19 + i)).getValue()
+      codDep = procFun.getRange('B' + (19 + i)).getValue()
+      Logger.log(actividadID)
+
+      ubicacionesCrit(cuestBIA, codDep)
+      funcionCritica(cuestBIA, actividadID,codDep)
+    }
+  }
+}
+
+function funcionCritica(cuestBIA, actividadID,codDep){
+  var fila = 19
+  var filaProc = 0
+  var procAct = depBIA.getSheetByName("2B.MAPEO ACTV.CR. vs FUNC.CR.")
+  datos = procAct.getRange('C19:C').getValues()
+  //Logger.log(datos)
+  for (k = 0; k < datos.length; k++) {
+    if (datos[k] == actividadID) {
+      funcionCrit = procAct.getRange('F' + (fila + k)).getValue()
+      Logger.log(funcionCrit)
+      canalesCriticos(cuestBIA, funcionCrit)
+    }
+  }
+}
+
+function canalesCriticos(cuestBIA, funcionCrit){
+  var fila = 6
+  var funcPrio = depBIA.getSheetByName("2C.FUNCIONES PRIORITARIAS")
+  var cuestionCanales = cuestBIA.getSheetByName('Cuestionario')
+  var datos = funcPrio.getRange('C6:C').getValues()
+  for (l = 0; l < datos.length; l++) {
+    if (datos[l] == funcionCrit) {
+      Logger.log(datos[l])
+      var canales = funcPrio.getRange('H' + (fila + l) + ':S' + (fila + l)).getValues()
+      Logger.log(canales)
+      for (m = 0; m < 12; m++) {
+        //Logger.log(canales[0][m])
+        if (canales[0][m] != "") {
+          var canal = (m + 8)
+          if (canal == 8) {
+            cuestionCanales.getRange('Z466').setValue('Sí')
+          }
+          else if (canal == 9) {
+            cuestionCanales.getRange('Z467').setValue('Sí')
+          }
+          else if (canal == 10) {
+            cuestionCanales.getRange('Z468').setValue('Sí')
+          }
+          else if (canal == 11) {
+            cuestionCanales.getRange('Z469').setValue('Sí')
+          }
+          else if (canal == 12) {
+            cuestionCanales.getRange('AJ466').setValue('Sí')
+          }
+          else if (canal == 13) {
+            cuestionCanales.getRange('AJ467').setValue('Sí')
+          }
+          else if (canal == 14) {
+            cuestionCanales.getRange('AE466').setValue('Sí')
+          }
+          else if (canal == 15) {
+            cuestionCanales.getRange('AE467').setValue('Sí')
+          }
+          else if (canal == 16) {
+            cuestionCanales.getRange('AE468').setValue('Sí')
+          }
+          else if (canal == 17) {
+            cuestionCanales.getRange('AE469').setValue('Sí')
+          }
+          else if (canal == 18) {
+            cuestionCanales.getRange('AJ468').setValue('Sí')
+          }
+          else if (canal == 19) {
+            cuestionCanales.getRange('AJ469').setValue('Sí')
+          }
+
+        }
+      }
+    }
+  }
+}
+
+function ubicacionesCrit(cuestBIA, codDep){
+  var ubiCrit = depBIA.getSheetByName("1.RESUMEN")
+  var cuestionUbi = cuestBIA.getSheetByName('Migracion_BIA')
+  var datos = ubiCrit.getRange('D39:D59').getValues()
+  var fj = 3 //Fila donde se introduce el proveedor
+  for (n = 0; n < datos.length; n++) {
+    Logger.log(datos[n].toString().indexOf(codDep.toString()))
+
+    if (datos[n] != "" && datos[n].toString().indexOf(codDep.toString()) != -1) {
+      cuestionUbi.getRange(fj, 71, 1, 1).setValue(ubiCrit.getRange('C' + (39 + n)).getValue())
+      fj++
+    }
+  }
+}
